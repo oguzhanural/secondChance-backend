@@ -12,11 +12,12 @@ const app = express();
 app.use("*",cors());
 const port = 3060;
 
+
 // Connect to MongoDB; we just do this one time
 connectToDatabase().then(() => {
     pinoLogger.info('Connected to DB');
 })
-    .catch((e) => console.error('Failed to connect to DB', e));
+    .catch((e) => console.error('Failed toooo connect to DB', e));
 
 
 app.use(express.json());
@@ -43,7 +44,8 @@ app.use(pinoHttp({ logger }));
 //{{insert code here}}
 
 // Items API Task 2: add the secondChanceItemsRoutes to the server by using the app.use() method.
-//{{insert code here}}
+const secondChanceItemsRoutes = require("./routes/secondChanceItemsRoutes");
+app.use('/api/secondchance/items', secondChanceItemsRoutes);
 
 // Search API Task 2: add the searchRoutes to the server by using the app.use() method.
 //{{insert code here}}
