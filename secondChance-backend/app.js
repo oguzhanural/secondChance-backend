@@ -41,7 +41,8 @@ app.use(pinoHttp({ logger }));
 
 // Use Routes
 // authRoutes Step 2: add the authRoutes and to the server by using the app.use() method.
-//{{insert code here}}
+const authRoutes = require("./routes/authRoutes");
+app.use('/api/auth', authRoutes);
 
 // Items API Task 2: add the secondChanceItemsRoutes to the server by using the app.use() method.
 const secondChanceItemsRoutes = require("./routes/secondChanceItemsRoutes");
