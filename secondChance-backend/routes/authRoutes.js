@@ -4,8 +4,14 @@ const connectToDatabase = require('../models/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+const dotenv = require('dotenv');
+const pino = require('pino');  // Import Pino logger
+dotenv.config();
+
 // const app = express();
 // app.use(express.json());
+
+const logger = pino();  // Create a Pino logger instance
 
 router.post('/register', async(req, res) => {
     try {
@@ -41,3 +47,5 @@ router.post('/register', async(req, res) => {
     }
 
 });
+
+module.exports = router;
