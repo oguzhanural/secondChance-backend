@@ -48,4 +48,37 @@ router.post('/register', async(req, res) => {
 
 });
 
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const db =  await connectToDatabase();
+        const collection = db.collection("users");
+        const user = await collection.findOne( { email: email });
+        if (!user) {
+            return res.status(400).json( { error: "Invalid email or password" });
+        }
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) {
+            return res.status(400).json({ error: "Invalid email or password" });
+        }
+        const userName = user.firstName;
+        const userEmail = user.email;
+
+        // If password match, create a JWT token and send it back to the client
+        const token = jwt.sign(
+            {userId: user._id},
+            process.env.JWT_SECRET,
+            {expiresIn: "1h"}
+        );
+
+        res.json({
+            token,
+            message: "Login successful!"
+        });
+
+    } catch (error) {
+        return res.status(500).send("Internal server error");
+    }
+});
+
 module.exports = router;
