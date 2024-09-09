@@ -3,6 +3,7 @@ const router = express.Router();
 const connectToDatabase = require('../models/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { body, validationResult } = require('express-validator');
 
 const dotenv = require('dotenv');
 const pino = require('pino');  // Import Pino logger
@@ -78,6 +79,38 @@ router.post('/login', async (req, res) => {
 
     } catch (error) {
         return res.status(500).send("Internal server error");
+    }
+});
+
+router.put('/update', async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            logger.error('Validation errors in update request', errors.array());
+            return res.send(400).json({ error: errors.array() });
+        }
+        const email = req.headers.email;
+        if(!email) {
+            logger.error('Email not found in the request headers');
+            return res.send(400).json({error: "Email not found int the request headers"});
+        }
+        const db = await connectToDatabase();
+        const collection = db.collection('users');
+        const existingUser = await collection.findOne({ email });
+        const updateUser = await collection.findOneAndUpdate(
+            {email},
+            {$set: existingUser},
+            {returnDocument: 'after'}
+        );
+        const token = jwt.sign(
+            {userId:existingUser._id},
+            process.env.JWT_SECRET,
+            {expiresIn: "1h"}
+        );
+        
+
+    } catch (error) {
+        
     }
 });
 
