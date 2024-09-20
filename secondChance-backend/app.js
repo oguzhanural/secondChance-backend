@@ -8,8 +8,8 @@ const connectToDatabase = require('./models/db')
 // const { loadData } = require("./util/import-mongo/index");
 
 const app = express()
-app.use("*", cors())
-const port = '3060'
+app.use('*', cors())
+const port = 3060
 
 // Connect to MongoDB; we just do this one time
 connectToDatabase().then(() => {
@@ -31,30 +31,29 @@ app.use(express.json())
 //{{insert code here}}
 
 
-const pinoHttp = require('pino-http');
-const logger = require('./logger');
+const pinoHttp = require('pino-http')
+const logger = require('./logger')
 
-app.use(pinoHttp({ logger }));
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(pinoHttp({ logger }))
+// app.use(express.static(path.join(__dirname, 'public')))
 
 // Use Routes
 // authRoutes Step 2: add the authRoutes and to the server by using the app.use() method.
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes")
 app.use('/api/auth', authRoutes);
 
 // Items API Task 2: add the secondChanceItemsRoutes to the server by using the app.use() method.
-const secondChanceItemsRoutes = require("./routes/secondChanceItemsRoutes");
-app.use('/api/secondchance/items', secondChanceItemsRoutes);
+const secondChanceItemsRoutes = require("./routes/secondChanceItemsRoutes")
+app.use('/api/secondchance/items', secondChanceItemsRoutes)
 
 // Search API Task 2: add the searchRoutes to the server by using the app.use() method.
-const searchRoutes = require('./routes/searchRoutes');
-app.use('/api/secondchance/search', searchRoutes);
-
+const searchRoutes = require('./routes/searchRoutes')
+app.use('/api/secondchance/search', searchRoutes)
 
 // Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send('Internal Server Error')
 });
 
 app.get("/",(req,res)=>{
@@ -62,5 +61,5 @@ app.get("/",(req,res)=>{
 })
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+    console.log(`Server running on port ${port}`)
+})
